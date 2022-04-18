@@ -1,0 +1,33 @@
+---
+- name: check if admin_file file exists
+  stat: 
+    path: /etc/kubernetes/admin.conf
+  register: admin_file_stat
+
+- name: initialize the cluster
+  become: yes
+  shell: 
+    cmd: kubeadm init --pod-network-cidr=10.244.0.0/16
+  when: admin_file_stat.stat.exists == False
+
+- name: create .kube directory
+  become: yes
+  become_user: ubuntu
+  file:
+    path: $HOME/.kube
+    state: directory
+    mode: 0755
+
+- name: copy admin.conf to user's kube config
+  become: yes
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /home/ubuntu/.kube/config
+    remote_src: yes
+    owner: ubuntu
+
+- name: install Pod network
+  become: yes
+  become_user: ubuntu
+  shell: 
+    cmd: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
