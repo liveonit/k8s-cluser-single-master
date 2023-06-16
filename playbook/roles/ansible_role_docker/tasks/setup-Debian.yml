@@ -7,12 +7,13 @@
     state: absent
 
 - name: Ensure dependencies are installed.
-  apt:
+  ansible.builtin.apt:
     name:
       - apt-transport-https
       - ca-certificates
       - gnupg2
     state: present
+    update_cache: yes
 
 - name: Add Docker apt key.
   apt_key:
