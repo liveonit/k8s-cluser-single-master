@@ -51,6 +51,15 @@
       ansible.builtin.set_fact:
         join_command: "{{ join_command_raw.stdout_lines[0] }}"
 
+    - name: Debug credentials
+      ansible.builtin.fetch:
+        src: "/home/{{ ansible_user }}/.kube/config"
+        dest: cluster_config
+        flat: true
+    - name: Set cluster credentials in variable
+      ansible.builtin.set_fact:
+        cluster_credentials: "{{ (credentials_output | from_yaml).clusters[0] }}"
+
 - name: Joining the cluster with workers
   hosts: workers
   remote_user: vagrant

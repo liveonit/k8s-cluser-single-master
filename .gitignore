@@ -4,3 +4,5 @@
 
 ssh-key*
 inventory.yml
+
+cluster_config

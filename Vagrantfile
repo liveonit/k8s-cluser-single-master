@@ -8,7 +8,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 #=======================================================
 # General Configuration
 #=======================================================
-    config.vm.box = "ubuntu/bionic64"
+    config.vm.box = "ubuntu/focal64"
     config.ssh.insert_key = false
     config.vm.provider "virtualbox" do |v|
       v.cpus = 2
